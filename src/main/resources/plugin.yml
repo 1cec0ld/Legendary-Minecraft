@@ -1,0 +1,7 @@
+main: com.gmail.ak1cec0ld.plugins.legendaries.Legendaries
+name: Legendaries
+api-version: 1.13
+version: 1.0.0
+author: 1cec0ld
+description: Manage economy by spawning legendary fights after a requirement is met
+prefix: Legend
