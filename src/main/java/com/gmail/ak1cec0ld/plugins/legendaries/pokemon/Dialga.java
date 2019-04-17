@@ -26,11 +26,11 @@ public class Dialga{
     private static Random r = new Random();
 
     public static boolean requirementsMet() {
+        if(lastSpawned > System.currentTimeMillis() - (1000 * 60 * ONLINE_MINUTES_REQUIRED))return false;
+        if(spawned)return false;
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getLastPlayed() <= System.currentTimeMillis() - (1000 * 60 * ONLINE_MINUTES_REQUIRED)
-                && lastSpawned <= System.currentTimeMillis() - (1000 * 60 * ONLINE_MINUTES_REQUIRED)
-                && p.getLocation().distance(new Location(p.getWorld(),1104,197,-3641)) < 10
-                && !spawned) {
+                && p.getLocation().distance(new Location(p.getWorld(),1104,197,-3641)) < 10) {
                 return true;
             }
         }
@@ -42,6 +42,7 @@ public class Dialga{
         lastSpawned = System.currentTimeMillis();
         entity = (LivingEntity) loc.getWorld().spawnEntity(loc, EntityType.HORSE);
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
+        entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
         entity.setHealth(HEALTH);
         entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "dialga"));
         schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Dialga::attack, 0L, 110L);
@@ -50,12 +51,12 @@ public class Dialga{
     public static void die(){
         Legendaries.instance().getServer().getScheduler().cancelTask(schedulerID);
         spawned = false;
-        reward(entity.getLocation());
+        //reward(entity.getLocation());
     }
 
-    private static void reward(Location loc){
+    /*private static void reward(Location loc){
 
-    }
+    }*/
 
     private static void attack() {
         int choice = r.nextInt(10);
