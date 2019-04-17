@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Dialga{
-    private static final long ONLINE_MINUTES_REQUIRED = 4;
+    private static final long ONLINE_MINUTES_REQUIRED = 60*6L;
     private static final double HEALTH = 750.0;
     private static LivingEntity entity;
     private static int schedulerID;
@@ -50,6 +50,11 @@ public class Dialga{
     public static void die(){
         Legendaries.instance().getServer().getScheduler().cancelTask(schedulerID);
         spawned = false;
+        reward(entity.getLocation());
+    }
+
+    private static void reward(Location loc){
+
     }
 
     private static void attack() {

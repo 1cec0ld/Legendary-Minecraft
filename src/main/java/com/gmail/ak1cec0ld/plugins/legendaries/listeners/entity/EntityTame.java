@@ -1,4 +1,4 @@
-package com.gmail.ak1cec0ld.plugins.legendaries.listeners;
+package com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
