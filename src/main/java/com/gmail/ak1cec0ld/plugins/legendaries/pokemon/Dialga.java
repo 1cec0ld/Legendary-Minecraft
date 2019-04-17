@@ -5,20 +5,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class Dialga{
-    private static final long ONLINE_MINUTES_REQUIRED = 6;
-    private static final double HEALTH = 500.0;
+    private static final long ONLINE_MINUTES_REQUIRED = 4;
+    private static final double HEALTH = 750.0;
     private static LivingEntity entity;
     private static int schedulerID;
     private static boolean spawned = false;
@@ -43,8 +43,8 @@ public class Dialga{
         entity = (LivingEntity) loc.getWorld().spawnEntity(loc, EntityType.HORSE);
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
         entity.setHealth(HEALTH);
-        entity.setMetadata("legendary_dialga", new FixedMetadataValue(Legendaries.instance(), true));
-        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Dialga::attack, 0L, 100L);
+        entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "dialga"));
+        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Dialga::attack, 0L, 110L);
     }
 
     public static void die(){
@@ -53,14 +53,13 @@ public class Dialga{
     }
 
     private static void attack() {
-        int choice = r.nextInt(2);
-        switch(choice){
-            case 0:
-                roarOfTime(entity.getLocation());
-                break;
-            case 1:
-                Bukkit.getLogger().info("not roar of time");
-                break;
+        int choice = r.nextInt(10);
+        if(choice < 7){
+            roarOfTime(entity.getLocation());
+        /*} else if(choice < 8){
+            dracoMeteor(entity.getLocation());*/
+        } else {
+            futureSight(entity.getLocation());
         }
     }
 
@@ -68,28 +67,63 @@ public class Dialga{
         double dmg = 5+r.nextDouble()*10;
         for (Entity e : entity.getNearbyEntities(50.0,50.0,50.0)) {
             if(e instanceof Player) {
-                Player p = (Player) e;
-                p.playSound(location, Sound.ENTITY_HORSE_ANGRY, 100f, 100f);
-                p.playSound(location, Sound.ENTITY_HORSE_BREATHE, 100f, 100f);
-                for (ItemStack item : p.getInventory().getContents()) {
-                    if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof Damageable) {
-                        ItemMeta meta = item.getItemMeta();
-                        ((Damageable) meta).setDamage(((Damageable) meta).getDamage() + 100+r.nextInt(50));
-                        item.setItemMeta(meta);
-                        if(((Damageable)meta).getDamage()>=item.getType().getMaxDurability()){
-                            ((Damageable) meta).setDamage(0);
-                            item.setItemMeta(meta);
-                            item.setAmount(item.getAmount()-1);
-                        }
-                    }
-                }
-                if((lastSpawned = 1) == 1 ){
+                reduceAllDurabilities((Player)e);
+                reduceAllPotionEffectDurations((Player)e);
+                ((Player)e).playSound(location, Sound.ENTITY_HORSE_ANGRY, 100f, 100f);
+                ((Player)e).playSound(location, Sound.ENTITY_HORSE_BREATHE, 100f, 100f);
 
-                }
             }
             if(e instanceof LivingEntity){
-                ((LivingEntity)e).damage(dmg,entity);
+                if(!e.hasMetadata("legendary")) {
+                    ((LivingEntity) e).damage(dmg, entity);
+                }
             }
         }
+    }
+    private static void reduceAllDurabilities(Player p){
+        for (ItemStack item : p.getInventory().getContents()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof Damageable) {
+                ItemMeta meta = item.getItemMeta();
+                ((Damageable) meta).setDamage(((Damageable) meta).getDamage() + 100+r.nextInt(50));
+                item.setItemMeta(meta);
+                if(((Damageable)meta).getDamage()>=item.getType().getMaxDurability()){
+                    ((Damageable) meta).setDamage(0);
+                    item.setItemMeta(meta);
+                    item.setAmount(item.getAmount()-1);
+                }
+            }
+        }
+    }
+    private static void reduceAllPotionEffectDurations(Player p){
+        int duration;
+        int amplifier;
+        for(PotionEffectType each : PotionEffectType.values()){
+            if(p.hasPotionEffect(each)){
+                duration = p.getPotionEffect(each).getDuration();
+                amplifier = p.getPotionEffect(each).getAmplifier();
+                p.removePotionEffect(each);
+                p.addPotionEffect(new PotionEffect(each,duration/2, amplifier),true);
+            }
+        }
+    }/*
+    private static void dracoMeteor(Location location){
+        final World world = location.getWorld();
+        for(int x = -30; x <= 30; x += 15){
+            for(int z = -30; z <= 30; z += 10){
+                world.spawn(new Location(world, location.getBlockX()+x,world.getHighestBlockYAt(location)+5,location.getBlockZ()+z), TNTPrimed.class);
+            }
+        }
+    }*/
+    private static void futureSight(Location location){
+        HashMap<Entity,Location> previousLocs = new HashMap<>();
+        for(Entity each : entity.getNearbyEntities(30.0,30.0,30.0)){
+            previousLocs.put(each,each.getLocation());
+        }
+        Legendaries.instance().getServer().getScheduler().runTaskLater(Legendaries.instance(), () -> {
+            for(Entity each : previousLocs.keySet()){
+                each.teleport(previousLocs.get(each));
+                previousLocs.remove(each);
+            }
+        },100L);
     }
 }
