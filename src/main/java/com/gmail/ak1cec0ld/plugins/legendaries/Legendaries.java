@@ -6,6 +6,7 @@ import com.gmail.ak1cec0ld.plugins.legendaries.listeners.block.BlockRedstone;
 import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.EntityDamage;
 import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.EntityDeath;
 import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.EntityTame;
+import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.PotionChange;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Legendaries extends JavaPlugin {
@@ -18,6 +19,7 @@ public class Legendaries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityDeath(),instance);
         getServer().getPluginManager().registerEvents(new EntityTame(), instance);
         getServer().getPluginManager().registerEvents(new EntityDamage(), instance);
+        getServer().getPluginManager().registerEvents(new PotionChange(), instance);
 
         getServer().getPluginManager().registerEvents(new BlockRedstone(), instance);
     }
