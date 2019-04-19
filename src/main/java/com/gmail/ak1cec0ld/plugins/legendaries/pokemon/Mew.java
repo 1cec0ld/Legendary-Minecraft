@@ -72,19 +72,22 @@ public class Mew {
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.00);
         entity.setHealth(hp);
         if(entity instanceof PigZombie) ((PigZombie)entity).setAngry(true);
-        if(entity instanceof Zombie) ((Zombie)entity).setBaby(true);
+        if(entity instanceof Zombie) ((Zombie)entity).setBaby(false);
+        if(entity instanceof Creeper) ((Creeper)entity).setPowered(true);
+        if(entity instanceof Creeper) ((Creeper)entity).setMaxFuseTicks(20);
+        if(entity instanceof Creeper) ((Creeper)entity).setExplosionRadius(15);
         entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "mew"));
     }
     private static void fillPotentials(){
         potentialAir = new ArrayList<>();
         potentialWater = new ArrayList<>();
         potentialAir.add(EntityType.BLAZE);
-        potentialAir.add(EntityType.CAVE_SPIDER);
         potentialAir.add(EntityType.CREEPER);
         potentialWater.add(EntityType.DROWNED);
         potentialWater.add(EntityType.ELDER_GUARDIAN);
         potentialAir.add(EntityType.ENDERMITE);
         potentialAir.add(EntityType.EVOKER);
+        potentialAir.add(EntityType.GHAST);
         potentialWater.add(EntityType.GUARDIAN);
         potentialAir.add(EntityType.HUSK);
         potentialAir.add(EntityType.ILLUSIONER);
@@ -104,26 +107,4 @@ public class Mew {
         }
         return potentialAir.get(r.nextInt(potentialAir.size()));
     }
-    /*private static void transform_riding_method(){
-        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,99999,1,false,false),true);
-        List<Entity> riders = entity.getPassengers();
-        for(Entity each : riders){
-            entity.setHealth(((LivingEntity)each).getHealth());
-            each.remove();
-        }
-        int mob = r.nextInt(5);
-        Entity rider;
-        if(mob < 2){
-            rider = entity.getWorld().spawnEntity(entity.getLocation(),EntityType.SKELETON);
-        } else if(mob < 3) {
-            rider = entity.getWorld().spawnEntity(entity.getLocation(), EntityType.GUARDIAN);
-        } else if(mob < 4){
-            rider = entity.getWorld().spawnEntity(entity.getLocation(),EntityType.GHAST);
-        } else {
-            rider = entity.getWorld().spawnEntity(entity.getLocation(),EntityType.ELDER_GUARDIAN);
-        }
-        ((LivingEntity)rider).getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
-        ((LivingEntity)rider).setHealth(entity.getHealth());
-        entity.addPassenger(rider);
-    }*/
 }
