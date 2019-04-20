@@ -8,6 +8,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +38,7 @@ public class Mew {
     public static void spawn(Location loc) {
         fillPotentials();
         spawned = true;
-        entity = (LivingEntity) loc.getWorld().spawnEntity(loc, EntityType.PIG_ZOMBIE);
-        ((Zombie)entity).setBaby(true);
-        ((PigZombie)entity).setAngry(true);
-        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
-        entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(STRENGTH);
-        entity.setHealth(HEALTH);
-        entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "mew"));
+        spawnMew(EntityType.PIG_ZOMBIE,loc,HEALTH);
         schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Mew::attack, 100L, 200L);
     }
 
@@ -66,14 +62,7 @@ public class Mew {
         EntityType next = getEntityType();
 
         entity.remove();
-        entity = (LivingEntity)entity.getWorld().spawnEntity(entity.getLocation(), next);
-        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
-        entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(STRENGTH);
-        entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.00);
-        entity.setHealth(hp);
-        if(entity instanceof PigZombie) ((PigZombie)entity).setAngry(true);
-        if(entity instanceof Zombie) ((Zombie)entity).setBaby(true);
-        entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "mew"));
+        spawnMew(next, entity.getLocation(), hp);
     }
     private static void fillPotentials(){
         potentialAir = new ArrayList<>();
@@ -103,6 +92,17 @@ public class Mew {
             return potentialWater.get(r.nextInt(potentialWater.size()));
         }
         return potentialAir.get(r.nextInt(potentialAir.size()));
+    }
+    private static void spawnMew(EntityType eType, Location loc, double hp){
+        entity = (LivingEntity)loc.getWorld().spawnEntity(loc, eType);
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999,3,false,false));
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
+        entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(STRENGTH);
+        entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.00);
+        entity.setHealth(hp);
+        if(entity instanceof PigZombie) ((PigZombie)entity).setAngry(true);
+        if(entity instanceof Zombie) ((Zombie)entity).setBaby(true);
+        entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "mew"));
     }
     /*private static void transform_riding_method(){
         entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,99999,1,false,false),true);

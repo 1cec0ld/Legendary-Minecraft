@@ -75,8 +75,8 @@ public class Dialga{
             if(e instanceof Player) {
                 reduceAllDurabilities((Player)e);
                 reduceAllPotionEffectDurations((Player)e);
-                ((Player)e).playSound(location, Sound.ENTITY_HORSE_ANGRY, 100f, 100f);
-                ((Player)e).playSound(location, Sound.ENTITY_HORSE_BREATHE, 100f, 100f);
+                ((Player)e).playSound(location, Sound.ENTITY_ENDERMAN_SCREAM, 100f, 100f);
+                ((Player)e).playSound(location, Sound.ENTITY_ENDERMAN_DEATH, 100f, 100f);
 
             }
             if(e instanceof LivingEntity){
