@@ -54,16 +54,24 @@ public class Mew {
     private static void attack(){
         int choice = r.nextInt(10);
         if(choice < 7){
-            transform();
+            //transform();
+            launch();
         }
     }
-    private static void transform(){
+    private static void launch(){
+        for(Entity eachEntity : entity.getNearbyEntities(20,20,20)){
+            if (eachEntity instanceof Player){
+
+            }
+        }
+    }
+    /*private static void transform(){
         double hp = entity.getHealth();
         EntityType next = getEntityType();
 
         entity.remove();
         spawnMew(next,entity.getLocation(),hp);
-    }
+    }*/
     private static void spawnMew(EntityType eType, Location loc, double hp){
         entity = (LivingEntity)loc.getWorld().spawnEntity(loc, eType);
         entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999,3,false,false));

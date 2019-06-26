@@ -1,5 +1,6 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity;
 
+import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -18,6 +19,10 @@ public class EntityDamage implements Listener {
            event.getCause().equals(EntityDamageEvent.DamageCause.LAVA) ||
            event.getCause().equals(EntityDamageEvent.DamageCause.SUFFOCATION) ||
            event.getCause().equals(EntityDamageEvent.DamageCause.DROWNING)){
+            event.setCancelled(true);
+        }
+        if(event.getCause().toString().contains("EXPLOSION") && event.getEntity().hasMetadata("explodeImmune")){
+            event.getEntity().removeMetadata("explodeImmune", Legendaries.instance());
             event.setCancelled(true);
         }
     }
