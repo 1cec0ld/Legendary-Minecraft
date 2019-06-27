@@ -23,6 +23,7 @@ public class Dialga{
     private static int schedulerID;
     private static boolean spawned = false;
     private static long lastSpawned;
+    private static HashMap<Entity,Location> previousLocs;
     private static Random r = new Random();
 
     public static boolean requirementsMet() {
@@ -44,6 +45,7 @@ public class Dialga{
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
         entity.setHealth(HEALTH);
+        previousLocs = new HashMap<>();
         entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "dialga"));
         schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Dialga::attack, 0L, 110L);
     }
@@ -65,7 +67,7 @@ public class Dialga{
         /*} else if(choice < 8){
             dracoMeteor(entity.getLocation());*/
         } else {
-            futureSight(entity.getLocation());
+            futureSight();
         }
     }
 
@@ -120,10 +122,9 @@ public class Dialga{
             }
         }
     }*/
-    private static void futureSight(Location location){
-        HashMap<Entity,Location> previousLocs = new HashMap<>();
-        for(Entity each : entity.getNearbyEntities(30.0,30.0,30.0)){
-            previousLocs.put(each,each.getLocation());
+    private static void futureSight(){
+        for (Entity each : entity.getNearbyEntities(30.0, 30.0, 30.0)) {
+            previousLocs.put(each, each.getLocation());
         }
         Legendaries.instance().getServer().getScheduler().runTaskLater(Legendaries.instance(), () -> {
             for(Entity each : previousLocs.keySet()){

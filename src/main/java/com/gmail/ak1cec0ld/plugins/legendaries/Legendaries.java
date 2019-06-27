@@ -21,7 +21,7 @@ public class Legendaries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityDamage(), instance);
         getServer().getPluginManager().registerEvents(new PotionChange(), instance);
 
-        getServer().getPluginManager().registerEvents(new BlockRedstone(), instance);
+        //getServer().getPluginManager().registerEvents(new BlockRedstone(), instance);
     }
     public static Legendaries instance(){
         return instance;

@@ -10,7 +10,9 @@ public class EntityDamage implements Listener {
     @EventHandler
     public void onEntityTakeDamage(EntityDamageEvent event){
         if(event.getEntity().hasMetadata("legendary") ||
-          (event.getEntity().getVehicle()!=null && event.getEntity().getVehicle().hasMetadata("legendary")))cancelEffects(event);
+          (event.getEntity().getVehicle()!=null && event.getEntity().getVehicle().hasMetadata("legendary"))){
+            cancelEffects(event);
+        }
     }
     private void cancelEffects(EntityDamageEvent event){
         if(event.getCause().equals(EntityDamageEvent.DamageCause.FIRE) ||
