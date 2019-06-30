@@ -1,6 +1,7 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.pokemon;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
+import com.gmail.ak1cec0ld.plugins.legendaries.util.VelocityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,25 +11,26 @@ import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Mew {
-    private static double HEALTH = 750;
+    private static double HEALTH = 10;
     private static double STRENGTH = 20;
     private static LivingEntity entity;
     private static boolean spawned;
     private static Random r = new Random();
     private static int schedulerID;
-    private static List<EntityType> potentialAir;
-    private static List<EntityType> potentialWater;
+    //private static List<EntityType> potentialAir;
+    //private static List<EntityType> potentialWater;
 
-    public static boolean requirementsMet() {
-        Block b = new Location(Bukkit.getWorld("Japan"),17, 65, 418).getBlock();
-        if(b.getMetadata("mew").get(0).asInt() > 10
-        && !spawned){
+    public static boolean requirementsMet(Block b) {
+
+        if(b.getMetadata("mew").size() > 0 && b.getMetadata("mew").get(0).asInt() > 10
+                && !spawned){
             b.removeMetadata("mew",Legendaries.instance());
             return true;
         }
@@ -36,10 +38,10 @@ public class Mew {
     }
 
     public static void spawn(Location loc) {
-        fillPotentials();
+        //fillPotentials();
         spawned = true;
         spawnMew(EntityType.PIG_ZOMBIE,loc,HEALTH);
-        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Mew::attack, 100L, 200L);
+        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Mew::attack, 10L, 20L);
     }
 
     public static void die(){
@@ -60,11 +62,15 @@ public class Mew {
     }
     private static void launch(){
         for(Entity eachEntity : entity.getNearbyEntities(20,20,20)){
+            Entity thrown;
             if (eachEntity instanceof Player){
-
+                thrown = entity.getWorld().spawn(entity.getLocation(),TNTPrimed.class);
+                thrown.setVelocity(VelocityUtil.calculateVelocity(entity.getLocation().toVector(),eachEntity.getLocation().toVector(),2));
+                ((TNTPrimed)thrown).setFuseTicks(30);
             }
         }
     }
+
     /*private static void transform(){
         double hp = entity.getHealth();
         EntityType next = getEntityType();
@@ -83,7 +89,7 @@ public class Mew {
         if(entity instanceof Zombie) ((Zombie)entity).setBaby(true);
         entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "mew"));
     }
-    private static void fillPotentials(){
+    /*private static void fillPotentials(){
         potentialAir = new ArrayList<>();
         potentialWater = new ArrayList<>();
         potentialAir.add(EntityType.BLAZE);
@@ -105,13 +111,13 @@ public class Mew {
         potentialAir.add(EntityType.WITCH);
         potentialAir.add(EntityType.WITHER_SKELETON);
         potentialAir.add(EntityType.ZOMBIE);
-    }
-    private static EntityType getEntityType(){
+    }*/
+    /*private static EntityType getEntityType(){
         if(entity.getLocation().getBlock().getType().equals(Material.WATER)){
             return potentialWater.get(r.nextInt(potentialWater.size()));
         }
         return potentialAir.get(r.nextInt(potentialAir.size()));
-    }
+    }*/
     /*private static void transform_riding_method(){
         entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,99999,1,false,false),true);
         List<Entity> riders = entity.getPassengers();

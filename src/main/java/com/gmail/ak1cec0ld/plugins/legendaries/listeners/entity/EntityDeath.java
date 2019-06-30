@@ -2,6 +2,7 @@ package com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.Dialga;
 import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.Mew;
+import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.Regirock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -18,6 +19,9 @@ public class EntityDeath implements Listener {
                     break;
                 case "mew":
                     Mew.die();
+                    break;
+                case "regirock":
+                    Regirock.die();
                     break;
                 default:
                     break;
