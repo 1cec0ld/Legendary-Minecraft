@@ -11,9 +11,12 @@ public class BlockRedstone implements Listener {
 
     @EventHandler
     public void onRedstoneUpdate(BlockRedstoneEvent event){
-        //if(event.getBlock().getLocation().getBlockX()!=17)return;
-        //if(event.getBlock().getLocation().getBlockY()!=65)return;
-        //if(event.getBlock().getLocation().getBlockZ()!=418)return;
+        //checkForMew(event);
+    }
+    private void checkForMew(BlockRedstoneEvent event){
+        if(event.getBlock().getLocation().getBlockX()!=17)return;
+        if(event.getBlock().getLocation().getBlockY()!=65)return;
+        if(event.getBlock().getLocation().getBlockZ()!=418)return;
         if(event.getNewCurrent() < event.getOldCurrent())return; //once per button press
         if(!event.getBlock().hasMetadata("mew")){
             event.getBlock().setMetadata("mew", new FixedMetadataValue(Legendaries.instance(), 0));
@@ -24,5 +27,4 @@ public class BlockRedstone implements Listener {
             Mew.spawn(event.getBlock().getRelative(1,4,2).getLocation());
         }
     }
-
 }
