@@ -7,6 +7,7 @@ import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.EntityDamage;
 import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.EntityDeath;
 import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.EntityTame;
 import com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity.PotionChange;
+import com.gmail.ak1cec0ld.plugins.legendaries.listeners.misc.StrengthCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Legendaries extends JavaPlugin {
@@ -22,6 +23,8 @@ public class Legendaries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PotionChange(), instance);
 
         getServer().getPluginManager().registerEvents(new BlockRedstone(), instance);
+
+        getServer().getPluginCommand("strength").setExecutor(new StrengthCommand());
     }
     public static Legendaries instance(){
         return instance;

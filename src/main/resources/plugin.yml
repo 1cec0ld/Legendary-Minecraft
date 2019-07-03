@@ -5,3 +5,6 @@ version: 1.0.0
 author: 1cec0ld
 description: Manage economy by spawning legendary fights after a requirement is met
 prefix: Legend
+commands:
+  strength:
+    description: "Lets you Use Your Strength"
