@@ -18,7 +18,7 @@ public class PlayerMovement implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
-        if(event.getTo().getWorld().getName().equals("Japan"))return;
+        if(!event.getTo().getWorld().getName().equals("Japan"))return;
         if(event.getFrom().getX() == event.getTo().getX() &&
             event.getFrom().getY() == event.getTo().getY() &&
             event.getFrom().getZ() == event.getTo().getZ())return;
@@ -36,8 +36,8 @@ public class PlayerMovement implements Listener {
         }
     }
     private boolean taggedLongEnough(Player player){
-        return player.getMetadata("umoving").size() > 0 &&
-                (System.currentTimeMillis() - player.getMetadata("umoving").get(0).asLong()) > millisToHoldStill;
+        Legendaries.debug(System.currentTimeMillis() + " - " + player.getMetadata("umoving").get(0).asLong() + " > " + millisToHoldStill);
+        return (System.currentTimeMillis() - player.getMetadata("umoving").get(0).asLong()) > millisToHoldStill;
     }
     private void applyTagToPlayerInZone(Player player){
         Legendaries.debug("Applied in-zone tag to " + player.getName());
