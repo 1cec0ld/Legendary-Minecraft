@@ -1,8 +1,7 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity;
 
-import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +20,7 @@ public class EntityDamage implements Listener {
 
     private void makeThrownTNTLessDestructive(EntityDamageEvent event) {
         if(event.getEntity() instanceof Player)return;
+        if(event.getEntity() instanceof Monster)return;
         for(Entity nearby : event.getEntity().getNearbyEntities(20,20,20)){
             if(nearby.hasMetadata("legendary")){
                 event.setCancelled(true);

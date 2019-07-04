@@ -14,12 +14,13 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class StrengthCommand implements CommandExecutor {
 
-    private static final double distanceFromTriggerMax = 1.5;
+    private static final double distanceFromTriggerMax = 1.25;
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if(!(commandSender instanceof Player))return false;
         Player sender = (Player)commandSender;
+        if(!sender.getWorld().getName().equals("Japan"))return false;
 
         int unarmedLevel = ExperienceAPI.getLevel(sender, PrimarySkillType.UNARMED);
         if(unarmedLevel < 10){
@@ -42,7 +43,7 @@ public class StrengthCommand implements CommandExecutor {
         removeLevels(sender);
         Regirock.spawn(new Location(sender.getWorld(),-3225.0,52,1873.0));
 
-        return false;
+        return true;
     }
 
     private boolean isConfirming(Player player){
