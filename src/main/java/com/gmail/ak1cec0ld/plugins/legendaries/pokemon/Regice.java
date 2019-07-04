@@ -4,9 +4,7 @@ import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -29,7 +27,7 @@ public class Regice {
         spawnRegice(loc);
         Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
                 "fill -4030 35 1167 -4030 36 1168 minecraft:air replace minecraft:granite");
-        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Regice::attack, 15L, 20L);
+        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Regice::attack, 30L, 20L);
     }
     public static void die(){
         spawned = false;
@@ -44,7 +42,7 @@ public class Regice {
     private static void attack(){
         int choice = r.nextInt(10);
         if(choice < 7){
-            Legendaries.debug("Regice attacked.");
+            trackingShot();
         }
     }
     private static void spawnRegice(Location loc){
@@ -58,5 +56,22 @@ public class Regice {
         entity.setHealth(Regice.HEALTH);
 
         entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "regice"));
+    }
+    private static void trackingShot(){
+        Entity shot = entity.getWorld().spawnEntity(entity.getLocation().add(0,2,0), EntityType.ARROW);
+        AbstractArrow projectile = (AbstractArrow)shot;
+        shot.setGravity(false);
+        projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+        int x = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), () -> {
+            if(projectile.isInBlock()){
+                Legendaries.instance().getServer().getScheduler().cancelTask(shot.getMetadata("scheduler").get(0).asInt());
+            }
+            for(Entity each : shot.getNearbyEntities(20,20,20)){
+                if(each instanceof Player || each instanceof Tameable){
+                    shot.setVelocity(each.getLocation().add(0,0.25,0).toVector().subtract(shot.getLocation().toVector()).normalize().multiply(0.35));
+                }
+            }
+        }, 10L, 10L);
+        shot.setMetadata("scheduler", new FixedMetadataValue(Legendaries.instance(), x));
     }
 }
