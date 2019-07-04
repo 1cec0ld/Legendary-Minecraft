@@ -40,7 +40,7 @@ public class Regirock {
     }
 
     private static void reward(Location loc){
-        loc.getWorld().dropItemNaturally(loc,new ItemStack(Material.SHULKER_BOX,1));
+        loc.getWorld().dropItemNaturally(loc,new ItemStack(Material.SHULKER_SHELL,1));
     }
     private static void attack(){
         int choice = r.nextInt(10);

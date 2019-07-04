@@ -27,7 +27,7 @@ public class PlayerMovement implements Listener {
             untagPlayerWhoMovedTooFar(moved);
             return;
         }
-        if(moved.hasMetadata("unmoving")){
+        if(moved.hasMetadata("unmoving") && moved.getMetadata("unmoving").size() > 0){
             if(!taggedLongEnough(moved))return;
             Regice.spawn(new Location(moved.getWorld(), -3969,36, 1169));
             untagPlayerWhoMovedTooFar(moved);
@@ -36,8 +36,9 @@ public class PlayerMovement implements Listener {
         }
     }
     private boolean taggedLongEnough(Player player){
-        Legendaries.debug(System.currentTimeMillis() + " - " + player.getMetadata("umoving").get(0).asLong() + " > " + millisToHoldStill);
-        return (System.currentTimeMillis() - player.getMetadata("umoving").get(0).asLong()) > millisToHoldStill;
+        if(!player.hasMetadata("unmoving"))return false;
+        //Legendaries.debug(System.currentTimeMillis() + " - " + player.getMetadata("unmoving").get(0).asLong() + " > " + millisToHoldStill);
+        return (System.currentTimeMillis() - player.getMetadata("unmoving").get(0).asLong()) > millisToHoldStill;
     }
     private void applyTagToPlayerInZone(Player player){
         Legendaries.debug("Applied in-zone tag to " + player.getName());
