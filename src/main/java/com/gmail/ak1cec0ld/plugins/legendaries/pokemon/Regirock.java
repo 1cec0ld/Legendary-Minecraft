@@ -30,6 +30,7 @@ public class Regirock {
         spawnRegirock(loc);
         Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
                 "fill -3283 51 1872 -3283 52 1873 minecraft:air replace minecraft:granite");
+        schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Regirock::attack, 20L, 20L);
     }
     public static void die(){
         spawned = false;
@@ -50,10 +51,10 @@ public class Regirock {
     }
     private static void rockBlast(){
         for(Entity eachEntity : entity.getNearbyEntities(20,20,20)){
-            Entity thrown;
+            TNTPrimed thrown;
             if (eachEntity instanceof Player && ((Player)eachEntity).getGameMode().equals(GameMode.SURVIVAL)){
                 thrown = entity.getWorld().spawn(entity.getLocation(),TNTPrimed.class);
-                ((TNTPrimed)thrown).setFuseTicks(25);
+                thrown.setFuseTicks(25);
                 try {
                     thrown.setVelocity(VelocityUtil.calculateVelocity(entity.getLocation().toVector(), eachEntity.getLocation().toVector(), 1));
                 } catch (IllegalArgumentException e){

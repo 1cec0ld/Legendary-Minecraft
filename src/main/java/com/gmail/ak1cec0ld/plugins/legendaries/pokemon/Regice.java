@@ -15,7 +15,7 @@ import java.util.Random;
 public class Regice {
 
     private static final double HEALTH = 750;
-    private static final double STRENGTH = 30;
+    private static final double STRENGTH = 20;
     private static final Random r = new Random();
     private static LivingEntity entity;
     private static boolean spawned;
@@ -60,6 +60,7 @@ public class Regice {
     private static void trackingShot(){
         Entity shot = entity.getWorld().spawnEntity(entity.getLocation().add(0,2,0), EntityType.ARROW);
         AbstractArrow projectile = (AbstractArrow)shot;
+        projectile.setDamage(30.0);
         shot.setGravity(false);
         projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
         int x = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), () -> {
