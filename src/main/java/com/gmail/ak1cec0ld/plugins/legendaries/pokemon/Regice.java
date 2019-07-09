@@ -16,6 +16,7 @@ public class Regice {
 
     private static final double HEALTH = 750;
     private static final double STRENGTH = 20;
+    private static final double ARROW_DAMAGE = 30;
     private static final Random r = new Random();
     private static LivingEntity entity;
     private static boolean spawned;
@@ -60,19 +61,31 @@ public class Regice {
     private static void trackingShot(){
         Entity shot = entity.getWorld().spawnEntity(entity.getLocation().add(0,2,0), EntityType.ARROW);
         AbstractArrow projectile = (AbstractArrow)shot;
-        projectile.setDamage(30.0);
+        projectile.setDamage(ARROW_DAMAGE);
         shot.setGravity(false);
         projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
         int x = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), () -> {
-            if(projectile.isInBlock()){
+            LivingEntity nearest = getNearestPlayer(shot);
+            if(projectile.isInBlock() || nearest == null){
                 Legendaries.instance().getServer().getScheduler().cancelTask(shot.getMetadata("scheduler").get(0).asInt());
+            } else {
+                shot.setVelocity(nearest.getLocation().add(0, 0.25, 0).toVector().subtract(shot.getLocation().toVector()).normalize().multiply(0.45));
             }
-            for(Entity each : shot.getNearbyEntities(20,20,20)){
-                if(each instanceof Player || each instanceof Tameable){
-                    shot.setVelocity(each.getLocation().add(0,0.25,0).toVector().subtract(shot.getLocation().toVector()).normalize().multiply(0.35));
-                }
-            }
+
         }, 10L, 10L);
         shot.setMetadata("scheduler", new FixedMetadataValue(Legendaries.instance(), x));
+    }
+    private static LivingEntity getNearestPlayer(Entity source){
+        final int radius = 20;
+        LivingEntity nearest = null;
+        double minDistance = (radius+2)*(radius+2);
+        for(Entity each : source.getNearbyEntities(radius,radius,radius)){
+            if(each instanceof Player || each instanceof Tameable){
+                if(each.getLocation().distanceSquared(source.getLocation()) < minDistance){
+                    nearest = (LivingEntity)each;
+                }
+            }
+        }
+        return nearest;
     }
 }
