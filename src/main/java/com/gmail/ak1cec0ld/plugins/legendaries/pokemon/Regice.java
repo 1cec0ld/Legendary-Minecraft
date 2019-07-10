@@ -62,6 +62,8 @@ public class Regice {
         Entity shot = entity.getWorld().spawnEntity(entity.getLocation().add(0,2,0), EntityType.ARROW);
         AbstractArrow projectile = (AbstractArrow)shot;
         projectile.setDamage(ARROW_DAMAGE);
+        Arrow arrow = (Arrow)projectile;
+        arrow.addCustomEffect(new PotionEffect(PotionEffectType.SLOW,r.nextInt(20)+20, r.nextInt(3)+1,false, false),true);
         shot.setGravity(false);
         projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
         int x = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), () -> {
@@ -70,10 +72,9 @@ public class Regice {
                 Legendaries.instance().getServer().getScheduler().cancelTask(shot.getMetadata("scheduler").get(0).asInt());
                 shot.remove();
             } else {
-                shot.setVelocity(nearest.getLocation().add(0, 0.25, 0).toVector().subtract(shot.getLocation().toVector()).normalize().multiply(0.45));
+                shot.setVelocity(nearest.getLocation().add(0, 0.25, 0).toVector().subtract(shot.getLocation().toVector()).normalize().multiply(0.35));
             }
-
-        }, 10L, 10L);
+        }, 5L, 5L);
         shot.setMetadata("scheduler", new FixedMetadataValue(Legendaries.instance(), x));
     }
     private static LivingEntity getNearestPlayer(Entity source){
