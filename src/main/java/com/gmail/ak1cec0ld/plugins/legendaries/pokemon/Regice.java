@@ -77,8 +77,8 @@ public class Regice {
     }
     private static LivingEntity getNearestPlayer(Entity source){
         final int radius = 20;
-        LivingEntity nearest = null;
         double minDistance = (radius+2)*(radius+2);
+        LivingEntity nearest = null;
         for(Entity each : source.getNearbyEntities(radius,radius,radius)){
             if(each instanceof Player || each instanceof Tameable){
                 if(each.getLocation().distanceSquared(source.getLocation()) < minDistance){
