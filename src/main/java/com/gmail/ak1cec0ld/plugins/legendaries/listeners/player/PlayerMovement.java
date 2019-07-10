@@ -41,12 +41,12 @@ public class PlayerMovement implements Listener {
         return (System.currentTimeMillis() - player.getMetadata("unmoving").get(0).asLong()) > millisToHoldStill;
     }
     private void applyTagToPlayerInZone(Player player){
-        Legendaries.debug("Applied in-zone tag to " + player.getName());
+        //Legendaries.debug("Applied in-zone tag to " + player.getName());
         player.setMetadata("unmoving", new FixedMetadataValue(Legendaries.instance(),System.currentTimeMillis()));
     }
     private void untagPlayerWhoMovedTooFar(Player player){
         if(!player.hasMetadata("unmoving"))return;
-        Legendaries.debug("Removed in-zone tag to " + player.getName());
+        //Legendaries.debug("Removed in-zone tag to " + player.getName());
         player.removeMetadata("unmoving", Legendaries.instance());
     }
 }
