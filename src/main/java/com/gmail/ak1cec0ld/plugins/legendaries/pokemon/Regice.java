@@ -66,8 +66,9 @@ public class Regice {
         projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
         int x = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), () -> {
             LivingEntity nearest = getNearestPlayer(shot);
-            if(projectile.isInBlock() || nearest == null){
+            if(projectile.isInBlock() || nearest == null || !shot.isValid()){
                 Legendaries.instance().getServer().getScheduler().cancelTask(shot.getMetadata("scheduler").get(0).asInt());
+                shot.remove();
             } else {
                 shot.setVelocity(nearest.getLocation().add(0, 0.25, 0).toVector().subtract(shot.getLocation().toVector()).normalize().multiply(0.45));
             }
