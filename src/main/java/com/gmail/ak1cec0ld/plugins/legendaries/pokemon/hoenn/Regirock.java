@@ -1,4 +1,4 @@
-package com.gmail.ak1cec0ld.plugins.legendaries.pokemon;
+package com.gmail.ak1cec0ld.plugins.legendaries.pokemon.hoenn;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
 import com.gmail.ak1cec0ld.plugins.legendaries.util.VelocityUtil;
@@ -28,15 +28,12 @@ public class Regirock {
         if(spawned)return;
         spawned = true;
         spawnRegirock(loc);
-        Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
-                "fill -3283 51 1872 -3283 52 1873 minecraft:air replace minecraft:granite");
         schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Regirock::attack, 20L, 20L);
     }
     public static void die(){
         spawned = false;
+        entity.remove();
         Legendaries.instance().getServer().getScheduler().cancelTask(schedulerID);
-        Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
-                "fill -3283 51 1872 -3283 52 1873 minecraft:granite replace minecraft:air");
         reward(entity.getLocation());
     }
 

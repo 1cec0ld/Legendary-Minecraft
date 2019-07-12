@@ -1,7 +1,7 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.listeners.misc;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
-import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.Regirock;
+import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.hoenn.Regirock;
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType;
 import org.bukkit.Bukkit;
@@ -42,7 +42,8 @@ public class StrengthCommand implements CommandExecutor {
         stopConfirming(sender);
         removeLevels(sender);
         Regirock.spawn(new Location(sender.getWorld(),-3225.0,52,1873.0));
-
+        Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
+                "fill -3283 51 1872 -3283 52 1873 minecraft:air replace minecraft:granite");
         return true;
     }
 

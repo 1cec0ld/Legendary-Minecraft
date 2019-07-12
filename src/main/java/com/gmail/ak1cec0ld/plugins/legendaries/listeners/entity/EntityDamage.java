@@ -1,10 +1,12 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.listeners.entity;
 
+import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class EntityDamage implements Listener {
@@ -13,6 +15,7 @@ public class EntityDamage implements Listener {
     public void onEntityTakeDamage(EntityDamageEvent event){
         if(event.getEntity().hasMetadata("legendary") ||
           (event.getEntity().getVehicle()!=null && event.getEntity().getVehicle().hasMetadata("legendary"))){
+//Legendaries.debug(event.getCause().name());
             cancelEffects(event);
         }
         makeThrownTNTLessDestructive(event);
@@ -29,8 +32,15 @@ public class EntityDamage implements Listener {
     }
 
     private void cancelEffects(EntityDamageEvent event){
+        if(event instanceof EntityDamageByEntityEvent){
+            EntityDamageByEntityEvent e = (EntityDamageByEntityEvent)event;
+            if(e.getDamager().hasMetadata("legendary")){
+                event.setCancelled(true);
+            }
+        }
         if(event.getCause().equals(EntityDamageEvent.DamageCause.FIRE) ||
            event.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK) ||
+           event.getCause().equals(EntityDamageEvent.DamageCause.FALL) ||
            event.getCause().equals(EntityDamageEvent.DamageCause.DRYOUT)  ||
            event.getCause().equals(EntityDamageEvent.DamageCause.LAVA) ||
            event.getCause().equals(EntityDamageEvent.DamageCause.SUFFOCATION) ||

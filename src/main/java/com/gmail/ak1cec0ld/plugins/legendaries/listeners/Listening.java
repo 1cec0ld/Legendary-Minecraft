@@ -1,7 +1,7 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.listeners;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
-import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.Dialga;
+import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.sinnoh.Dialga;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

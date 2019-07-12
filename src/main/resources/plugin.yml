@@ -8,3 +8,5 @@ prefix: Legend
 commands:
   strength:
     description: "Lets you Use Your Strength"
+  spawnpokemon:
+    description: "Spawns the pokemon specified"

@@ -1,7 +1,7 @@
 package com.gmail.ak1cec0ld.plugins.legendaries.listeners.player;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
-import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.Regice;
+import com.gmail.ak1cec0ld.plugins.legendaries.pokemon.hoenn.Regice;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,6 +30,8 @@ public class PlayerMovement implements Listener {
         if(moved.hasMetadata("unmoving") && moved.getMetadata("unmoving").size() > 0){
             if(!taggedLongEnough(moved))return;
             Regice.spawn(new Location(moved.getWorld(), -3969,36, 1169));
+            Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
+                    "fill -4030 35 1167 -4030 36 1168 minecraft:air replace minecraft:granite");
             untagPlayerWhoMovedTooFar(moved);
         } else {
             applyTagToPlayerInZone(moved);

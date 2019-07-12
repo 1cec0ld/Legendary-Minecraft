@@ -1,6 +1,7 @@
-package com.gmail.ak1cec0ld.plugins.legendaries.pokemon;
+package com.gmail.ak1cec0ld.plugins.legendaries.pokemon.hoenn;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
+import com.gmail.ak1cec0ld.plugins.legendaries.util.NearestUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -26,15 +27,12 @@ public class Regice {
         if(spawned)return;
         spawned = true;
         spawnRegice(loc);
-        Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
-                "fill -4030 35 1167 -4030 36 1168 minecraft:air replace minecraft:granite");
         schedulerID = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), Regice::attack, 30L, 20L);
     }
     public static void die(){
         spawned = false;
+        entity.remove();
         Legendaries.instance().getServer().getScheduler().cancelTask(schedulerID);
-        Legendaries.instance().getServer().dispatchCommand(Legendaries.instance().getServer().getConsoleSender(),
-                "fill -4030 35 1167 -4030 36 1168 minecraft:granite replace minecraft:air");
         reward(entity.getLocation());
     }
     private static void reward(Location loc){
@@ -54,21 +52,20 @@ public class Regice {
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
         entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(STRENGTH);
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(2.00);
-        entity.setHealth(Regice.HEALTH);
+        entity.setHealth(HEALTH);
 
         entity.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "regice"));
     }
     private static void trackingShot(){
-        Entity shot = entity.getWorld().spawnEntity(entity.getLocation().add(0,2,0), EntityType.ARROW);
-        AbstractArrow projectile = (AbstractArrow)shot;
-        projectile.setDamage(ARROW_DAMAGE);
-        Arrow arrow = (Arrow)projectile;
-        arrow.addCustomEffect(new PotionEffect(PotionEffectType.SLOW,r.nextInt(20)+20, r.nextInt(3)+1,false, false),true);
+        if(!entity.isValid())return;
+        Arrow shot = entity.launchProjectile(Arrow.class);
+        shot.setDamage(ARROW_DAMAGE);
+        shot.addCustomEffect(new PotionEffect(PotionEffectType.SLOW,r.nextInt(20)+20, r.nextInt(3)+1,false, false),true);
         shot.setGravity(false);
-        projectile.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+        shot.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
         int x = Legendaries.instance().getServer().getScheduler().scheduleSyncRepeatingTask(Legendaries.instance(), () -> {
-            LivingEntity nearest = getNearestPlayer(shot);
-            if(projectile.isInBlock() || nearest == null || !shot.isValid()){
+            LivingEntity nearest = NearestUtil.getNearestPlayer(shot,20);
+            if(shot.isInBlock() || nearest == null || !shot.isValid()){
                 Legendaries.instance().getServer().getScheduler().cancelTask(shot.getMetadata("scheduler").get(0).asInt());
                 shot.remove();
             } else {
@@ -77,17 +74,5 @@ public class Regice {
         }, 5L, 5L);
         shot.setMetadata("scheduler", new FixedMetadataValue(Legendaries.instance(), x));
     }
-    private static LivingEntity getNearestPlayer(Entity source){
-        final int radius = 20;
-        double minDistance = (radius+2)*(radius+2);
-        LivingEntity nearest = null;
-        for(Entity each : source.getNearbyEntities(radius,radius,radius)){
-            if(each instanceof Player || each instanceof Tameable){
-                if(each.getLocation().distanceSquared(source.getLocation()) < minDistance){
-                    nearest = (LivingEntity)each;
-                }
-            }
-        }
-        return nearest;
-    }
+
 }

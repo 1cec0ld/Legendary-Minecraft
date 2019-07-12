@@ -1,20 +1,14 @@
-package com.gmail.ak1cec0ld.plugins.legendaries.pokemon;
+package com.gmail.ak1cec0ld.plugins.legendaries.pokemon.kanto;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
 import com.gmail.ak1cec0ld.plugins.legendaries.util.VelocityUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Mew {
@@ -27,17 +21,8 @@ public class Mew {
     //private static List<EntityType> potentialAir;
     //private static List<EntityType> potentialWater;
 
-    public static boolean requirementsMet(Block b) {
-
-        if(b.getMetadata("mew").size() > 0 && b.getMetadata("mew").get(0).asInt() > 10
-                && !spawned){
-            b.removeMetadata("mew",Legendaries.instance());
-            return true;
-        }
-        return false;
-    }
-
     public static void spawn(Location loc) {
+        if(spawned)return;
         //fillPotentials();
         spawned = true;
         spawnMew(EntityType.PIG_ZOMBIE,loc,HEALTH);
@@ -46,13 +31,14 @@ public class Mew {
 
     public static void die(){
         spawned = false;
+        entity.remove();
         Legendaries.instance().getServer().getScheduler().cancelTask(schedulerID);
-        //reward(entity.getLocation());
+        reward(entity.getLocation());
     }
 
-    /*private static void reward(Location loc){
+    private static void reward(Location loc){
 
-    }*/
+    }
     private static void attack(){
         int choice = r.nextInt(10);
         if(choice < 7){

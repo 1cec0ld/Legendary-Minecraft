@@ -1,4 +1,4 @@
-package com.gmail.ak1cec0ld.plugins.legendaries.pokemon;
+package com.gmail.ak1cec0ld.plugins.legendaries.pokemon.sinnoh;
 
 import com.gmail.ak1cec0ld.plugins.legendaries.Legendaries;
 import org.bukkit.Bukkit;
@@ -41,7 +41,7 @@ public class Dialga{
     public static void spawn(Location loc) {
         spawned = true;
         lastSpawned = System.currentTimeMillis();
-        entity = (LivingEntity) loc.getWorld().spawnEntity(loc, EntityType.HORSE);
+        entity = (LivingEntity) loc.getWorld().spawnEntity(loc, EntityType.RAVAGER);
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HEALTH);
         entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
         entity.setHealth(HEALTH);
