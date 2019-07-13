@@ -11,7 +11,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -65,7 +67,7 @@ public class SpawnPokemonCommand implements TabExecutor {
                     "regirock",
                     "darkrai"
                 );
-                return createdPokemon;
+                return StringUtil.copyPartialMatches(args[0],createdPokemon,new ArrayList<>(createdPokemon.size()));
             default:
                 return ImmutableList.of();
         }

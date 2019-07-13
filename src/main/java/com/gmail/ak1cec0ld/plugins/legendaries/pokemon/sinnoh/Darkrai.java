@@ -77,7 +77,7 @@ public class Darkrai {
             cloud.addCustomEffect(new PotionEffect(PotionEffectType.HARM,1,3), true);
             cloud.setColor(Color.BLACK);
             cloud.setRadiusOnUse(0);
-            cloud.setRadius(.05f);
+            cloud.setRadius(.1f);
             cloud.setDuration(99999999);
             cloud.setSource(entity);
             cloud.setMetadata("legendary", new FixedMetadataValue(Legendaries.instance(), "darkrai_cloud"));
