@@ -6,7 +6,10 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.*;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -99,12 +102,16 @@ public class Darkrai {
     private static void relocate(){
         LivingEntity target = NearestUtil.getNearestPlayer(entity,20);
         if(target == null)return;
-        if(entity.getLocation().distanceSquared(target.getLocation()) <= 5*5)return;
-        //Legendaries.debug(entity.getLocation().distanceSquared(target.getLocation())+ "" );
-        Vector target_pointing_to_entity = entity.getLocation().toVector().subtract(target.getLocation().add(0,1,0).toVector());
-        Vector edgeOfSphere = target_pointing_to_entity.normalize().multiply(5).add(target.getLocation().toVector());
-        //Legendaries.debug("edgeOfSphere coords: " + edgeOfSphere.toString());
-        Vector self_pointing_to_edge = edgeOfSphere.subtract(entity.getLocation().toVector()).normalize().multiply(.05);
+        int r = 5;
+        if(entity.getLocation().distanceSquared(target.getLocation()) <= r*r)return;
+
+        Vector targetCoord = target.getLocation().add(0,3,0).toVector();
+        Vector p = entity.getLocation().toVector();
+        Vector difference = p.subtract(C);
+        Vector edgeOfSphere = C.add(difference.normalize().multiply(r));
+
+        Vector self_pointing_to_edge = edgeOfSphere.subtract(p).normalize().multiply(.05);
         entity.setVelocity(self_pointing_to_edge);
+
     }
 }
